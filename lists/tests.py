@@ -1,3 +1,4 @@
+from django.http import HttpRequest
 from django.test import TestCase
 
 # Create your tests here.
@@ -7,6 +8,14 @@ from.views import home_page
 
 class HomePageTest(TestCase):
 
-    def root_url_resolve_to_home_page_view(self):
+    def test_root_url_resolve_to_home_page_view(self):
         found = resolve('/')
         self.assertEqual(found.func, home_page)
+
+    def test_home_page_returns_correct_html(self):
+        request = HttpRequest()
+        response = home_page(request)
+        html = response.content.decode()
+        self.assertTrue(html.startswith('<html>'))
+        self.assertIn('<title>TODO lists</title>', html)
+        self.assertTrue(html.endswith('</html>'))
