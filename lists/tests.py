@@ -16,6 +16,6 @@ class HomePageTest(TestCase):
         request = HttpRequest()
         response = home_page(request)
         html = response.content.decode()
-        self.assertTrue(html.startswith('<html>'))
+        self.assertTrue(html.startswith('<!DOCTYPE html>'))
         self.assertIn('<title>TODO lists</title>', html)
         self.assertTrue(html.endswith('</html>'))

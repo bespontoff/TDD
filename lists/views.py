@@ -5,6 +5,4 @@ from django.shortcuts import render
 
 
 def home_page(request):
-    return HttpResponse('<html>'
-                        '<title>TODO lists</title>'
-                        '</html>')
+    return render(request, 'lists/home.html')
