@@ -34,7 +34,8 @@ class UserViewTests(unittest.TestCase):
 
         todo_list = self.browser.find_element_by_id('todo_list')
         todo_items = todo_list.find_elements_by_tag_name('li')
-        self.assertTrue(any(item.text == 'Купить павлиньи перья' for item in todo_items))
+        self.assertTrue(any(item.text == 'Купить павлиньи перья' for item in todo_items),
+                        'Not found added text in TODO list')
         # Текстовое поле по-прежнему приглашает ее добавить еще один элемент.
         # Она вводит "Сделать мушку из павлиньих перьев"
         # (Эдит очень методична)

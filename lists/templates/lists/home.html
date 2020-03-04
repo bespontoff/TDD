@@ -2,9 +2,11 @@
 
 {% block content %}
     <h1>TODO lists</h1>
-    <label for="add_item">New TODO</label>
-    <input id="add_item" placeholder="Enter a TODO item"/>
-
+    <form method="post">
+        {% csrf_token %}
+        <label for="add_item">New TODO</label>
+        <input id="add_item" placeholder="Enter a TODO item" name="item_text" />
+    </form>
     <ul id="todo_list">
 
     </ul>
