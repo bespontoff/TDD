@@ -34,18 +34,31 @@ class UserViewTests(unittest.TestCase):
 
         todo_list = self.browser.find_element_by_id('todo_list')
         todo_items = todo_list.find_elements_by_tag_name('li')
-        self.assertTrue(any(item.text == 'Купить павлиньи перья' for item in todo_items),
-                        'Not found added text in TODO list')
+        self.assertIn('Купить павлиньи перья', [item.text for item in todo_items],
+                      f'Not found added text in TODO list: {todo_list.text}')
+
         # Текстовое поле по-прежнему приглашает ее добавить еще один элемент.
         # Она вводит "Сделать мушку из павлиньих перьев"
         # (Эдит очень методична)
-        self.fail('Дописать тест')
+        inputbox = self.browser.find_element_by_id('add_item')
+        inputbox.send_keys('Сделать мушку из павлиньих перьев')
+        inputbox.send_keys(Keys.ENTER)
+        time.sleep(1)
         # Страница снова обновляется, и теперь показывает оба элемента ее списка
+        todo_list = self.browser.find_element_by_id('todo_list')
+        todo_items = todo_list.find_elements_by_tag_name('li')
+        self.assertIn('Купить павлиньи перья', [item.text for item in todo_items],
+                      f'Not found added text in TODO list: {todo_list.text}')
+
+        self.assertIn('Сделать мушку из павлиньих перьев', [item.text for item in todo_items],
+                      f'Not found added text in TODO list: {todo_list.text}')
+
         # Эдит интересно, запомнит ли сайт ее список. Далее она видит, что
         # сайт сгенерировал для нее уникальный URL-адрес – об этом
         # выводится небольшой текст с объяснениями.
         # Она посещает этот URL-адрес – ее список по-прежнему там.
         # Удовлетворенная, она снова ложится спать
+        self.fail('Дописать тест')
 
 
 if __name__ == '__main__':
