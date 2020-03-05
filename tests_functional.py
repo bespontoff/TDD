@@ -13,6 +13,12 @@ class UserViewTests(unittest.TestCase):
     def tearDown(self) -> None:
         self.browser.quit()
 
+    def check_item_in_list(self, item):
+        todo_list = self.browser.find_element_by_id('todo_list')
+        todo_items = todo_list.find_elements_by_tag_name('li')
+        self.assertIn(item, [item.text for item in todo_items],
+                      f'Not found added text in TODO list: {todo_list.text}')
+
     def test_view_home_page_with_todo_list_and_retrieve_it_later(self):
         self.browser.get('http://127.0.0.1:8000')
         # Она видит, что заголовок и шапка страницы говорят о списках
@@ -32,10 +38,7 @@ class UserViewTests(unittest.TestCase):
         inputbox.send_keys(Keys.ENTER)
         time.sleep(1)
 
-        todo_list = self.browser.find_element_by_id('todo_list')
-        todo_items = todo_list.find_elements_by_tag_name('li')
-        self.assertIn('Купить павлиньи перья', [item.text for item in todo_items],
-                      f'Not found added text in TODO list: {todo_list.text}')
+        self.check_item_in_list('Купить павлиньи перья')
 
         # Текстовое поле по-прежнему приглашает ее добавить еще один элемент.
         # Она вводит "Сделать мушку из павлиньих перьев"
@@ -45,13 +48,8 @@ class UserViewTests(unittest.TestCase):
         inputbox.send_keys(Keys.ENTER)
         time.sleep(1)
         # Страница снова обновляется, и теперь показывает оба элемента ее списка
-        todo_list = self.browser.find_element_by_id('todo_list')
-        todo_items = todo_list.find_elements_by_tag_name('li')
-        self.assertIn('Купить павлиньи перья', [item.text for item in todo_items],
-                      f'Not found added text in TODO list: {todo_list.text}')
-
-        self.assertIn('Сделать мушку из павлиньих перьев', [item.text for item in todo_items],
-                      f'Not found added text in TODO list: {todo_list.text}')
+        self.check_item_in_list('Купить павлиньи перья')
+        self.check_item_in_list('Сделать мушку из павлиньих перьев')
 
         # Эдит интересно, запомнит ли сайт ее список. Далее она видит, что
         # сайт сгенерировал для нее уникальный URL-адрес – об этом
