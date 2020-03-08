@@ -15,7 +15,9 @@ class HomePageTest(TestCase):
         self.assertEqual(new_item.text, 'New item list')
         response_get = self.client.get('/')
         self.assertIn('New item list', response_get.content.decode())
-        self.assertTemplateUsed(response_get, 'lists/home.html')
+
+    def test_redirect_after_post_request(self):
+        response = self.client.post('/', data={'item_text': 'New item list'})
         self.assertEqual(response.status_code, 302)
         self.assertEqual(response['location'], '/')
 
