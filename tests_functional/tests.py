@@ -1,12 +1,10 @@
 import time
-
 from selenium import webdriver
-import unittest
-
+from django.test import LiveServerTestCase
 from selenium.webdriver.common.keys import Keys
 
 
-class UserViewTests(unittest.TestCase):
+class UserViewTests(LiveServerTestCase):
     def setUp(self) -> None:
         self.browser = webdriver.Firefox()
 
@@ -20,7 +18,7 @@ class UserViewTests(unittest.TestCase):
                       f'Not found added text in TODO list: {todo_list.text}')
 
     def test_view_home_page_with_todo_list_and_retrieve_it_later(self):
-        self.browser.get('http://127.0.0.1:8000')
+        self.browser.get(self.live_server_url)
         # Она видит, что заголовок и шапка страницы говорят о списках
         # неотложных дел
         self.assertIn('TODO', self.browser.title)
@@ -57,7 +55,3 @@ class UserViewTests(unittest.TestCase):
         # Она посещает этот URL-адрес – ее список по-прежнему там.
         # Удовлетворенная, она снова ложится спать
         self.fail('Дописать тест')
-
-
-if __name__ == '__main__':
-    unittest.main()
