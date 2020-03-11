@@ -1,13 +1,19 @@
+{% load bootstrap4 %}
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
+    {% bootstrap_css %}
+    {% bootstrap_javascript jquery='slim' %}
     {% block head %}{% endblock %}
     <title>{% block title%}TODO lists{% endblock %}</title>
 </head>
 <body>
-{% block content %}
-    content
-{% endblock %}
+<div class="container">
+    {% bootstrap_messages %}
+    {% block content %}
+        content
+    {% endblock %}
+</div>
 </body>
 </html>
