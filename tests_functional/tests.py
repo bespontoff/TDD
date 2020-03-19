@@ -6,7 +6,7 @@ from selenium.common.exceptions import WebDriverException
 
 
 class UserViewTests(LiveServerTestCase):
-    MAX_WAIT = 10
+    MAX_WAIT = 3
 
     def setUp(self) -> None:
         self.browser = webdriver.Firefox()
