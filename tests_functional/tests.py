@@ -59,9 +59,43 @@ class UserViewTests(LiveServerTestCase):
         self.wait_item_in_list('Купить павлиньи перья')
         self.wait_item_in_list('Сделать мушку из павлиньих перьев')
 
+    def test_users_can_start_different_lists(self):
+        self.browser.get(self.live_server_url)
+        inputbox = self.browser.find_element_by_id('add_item')
+        inputbox.send_keys('Buy soup')
+        inputbox.send_keys(Keys.ENTER)
+        self.wait_item_in_list('Buy soup')
+
+        edith_list_url = self.browser.current_url
+        self.assertRegex(edith_list_url, '/lists/.+')
+
         # Эдит интересно, запомнит ли сайт ее список. Далее она видит, что
         # сайт сгенерировал для нее уникальный URL-адрес – об этом
         # выводится небольшой текст с объяснениями.
+        self.browser.quit()
+        self.browser = webdriver.Firefox()
+
+        # Фрэнсис посещает домашнюю страницу. Нет никаких признаков списка Эдит
+        self.browser.get(self.live_server_url)
+        page_text = self.browser.find_element_by_tag_name('body').text
+        self.assertNotIn('Buy soup', page_text)
+
+        # Фрэнсис начинает новый список, вводя новый элемент. Он менее
+        # интересен, чем список Эдит...
+        inputbox = self.browser.find_element_by_id('add_item')
+        inputbox.send_keys('go to movie')
+        inputbox.send_keys(Keys.ENTER)
+        self.wait_item_in_list('go to movie')
+
+        francis_list_url = self.browser.current_url
+        self.assertRegex(francis_list_url, '/lists/.+')
+        self.assertNotEqual(edith_list_url, francis_list_url)
+
+        # Опять-таки, нет ни следа от списка Эдит
+        page_text = self.browser.find_element_by_tag_name('body').text
+        self.assertNotIn('Buy soup', page_text)
+        self.assertIn('go to movie', page_text)
+
         # Она посещает этот URL-адрес – ее список по-прежнему там.
         # Удовлетворенная, она снова ложится спать
         self.fail('Дописать тест')
