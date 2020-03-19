@@ -80,6 +80,12 @@ class ListViewTest(TestCase):
         new_item = Item.objects.first()
         self.assertEqual(new_item.text, 'New item list')
 
+    def test_passes_correct_list_to_template(self):
+        other_list = List.objects.create()
+        correct_list = List.objects.create()
+        response = self.client.get(f'/lists/{correct_list.id}')
+        self.assertEqual(response.context.get('list'), correct_list)
+
 
 class NewItemTest(TestCase):
 
