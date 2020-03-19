@@ -1,4 +1,4 @@
-from lists.models import Item
+from lists.models import Item, List
 from django.test import TestCase
 
 
@@ -9,21 +9,31 @@ class HomePageTest(TestCase):
         self.assertTemplateUsed(response, 'lists/home.html')
 
 
-class ItemModelTest(TestCase):
+class ListAndItemModelTest(TestCase):
 
     def test_save_and_retrieve_items(self):
+        list_ = List()
+        list_.save()
+
         first = Item()
         first.text = 'first item'
+        first.list = list_
         first.save()
 
         second = Item()
         second.text = 'second item'
+        second.list = list_
         second.save()
+
+        saved_list = List.objects.first()
+        self.assertEqual(saved_list, list_)
 
         saved_item = Item.objects.all()
         self.assertEqual(saved_item.count(), 2)
         self.assertEqual(saved_item[0].text, 'first item')
         self.assertEqual(saved_item[1].text, 'second item')
+        self.assertEqual(saved_item[0].list, list_)
+        self.assertEqual(saved_item[1].list, list_)
 
     def test_save_item_when_necessary(self):
         self.client.get('/')
@@ -33,8 +43,9 @@ class ItemModelTest(TestCase):
 class ListViewTest(TestCase):
 
     def test_display_all_items(self):
-        Item.objects.create(text='item1')
-        Item.objects.create(text='item2')
+        list_ = List.objects.create()
+        Item.objects.create(text='item1', list=list_)
+        Item.objects.create(text='item2', list=list_)
 
         response = self.client.get('/lists/cool-list')
 
