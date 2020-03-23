@@ -1,10 +1,10 @@
+import os
 import time
 
 from django.contrib.staticfiles.testing import StaticLiveServerTestCase
 from selenium import webdriver
-from django.test import LiveServerTestCase
-from selenium.webdriver.common.keys import Keys
 from selenium.common.exceptions import WebDriverException
+from selenium.webdriver.common.keys import Keys
 
 
 class UserViewTests(StaticLiveServerTestCase):
@@ -12,6 +12,9 @@ class UserViewTests(StaticLiveServerTestCase):
 
     def setUp(self) -> None:
         self.browser = webdriver.Firefox()
+        staging_server = os.environ.get('STAGING_SERVER')
+        if staging_server:
+            self.live_server_url = staging_server
 
     def tearDown(self) -> None:
         self.browser.quit()
