@@ -1,15 +1,16 @@
 {% extends 'lists/base.html' %}
 
 {% block content %}
-    <h1>Start a new TODO list</h1>
-    <form method="post" action="/lists/new">
-        {% csrf_token %}
-        <label for="add_item">New TODO</label>
-        <input id="add_item" placeholder="Enter a TODO item" name="item_text" />
-    </form>
-{#    <ul id="todo_list">#}
-{#        {% for item in items %}#}
-{#        <li>{{ item.text }}</li>#}
-{#        {% endfor %}#}
-{#    </ul>#}
+    <div class="jumbotron col-md-12">
+        <div class="text-center">
+            <h1 class="display-3">Start a new TODO list</h1>
+            <form method="post" action="/lists/new">
+                {% csrf_token %}
+                <input id="add_item"
+                       class="form-control"
+                       placeholder="Enter a TODO item"
+                       name="item_text"/>
+            </form>
+        </div>
+    </div>
 {% endblock %}
